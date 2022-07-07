@@ -26,6 +26,8 @@
                     if (response['msg'] == '저장완료'){
                         $.cookie('token', response['token'])
 
+                        console.log(response)
+
                         alert('로그인성공')
                         window.location.href = '/'
                     } else {
