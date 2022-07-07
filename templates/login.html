@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <title>로그인 페이지</title>
+
+
+
+</head>
+<script>
+    function login(){
+        let id = $('#idtxt').val()
+        let pw = $('#pwtxt').val()
+
+            $.ajax({
+                type: "POST",
+                url: "/api/login",
+                data: {
+                    id_give: id,
+                    pw_give : pw
+                },
+
+                success: function (response) {
+                    if (response['msg'] == '저장완료'){
+                        $.cookie('token', response['token'])
+
+                        alert('로그인성공')
+                        window.location.href = '/'
+                    } else {
+                        alert(response['msg'])
+                    }
+
+
+                }
+            });
+    }
+
+
+
+</script>
+
+<body>
+
+    <div class="wrap">
+    <div class="img">
+        <h1>로그인 페이지</h1>
+        <p class="imgtxt">아이디와 패스워드를 입력해주세요</p>
+    </div>
+
+    <DIV>
+        <p class="ID">ID: <input type="text" id="idtxt" name="idtxt"></p>
+
+        <p class="PW">PW: <input type="text" id="pwtxt" name="pwtxt"></p>
+
+        <button class="btn" onclick="login()" type="submit">로그인하기</button>
+        <button class="btn" onclick="location.href='/signup'" type="submit">회원가입</button>
+    </DIV>
+    </div>
+
+
+</body>
+</html>
