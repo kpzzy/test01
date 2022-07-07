@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <title>회원가입 페이지</title>
+
+
+
+</head>
+<script>
+    function signup_do() {
+        let id = $('#idtxt').val()
+        let pw = $('#pwtxt').val()
+
+            $.ajax({
+                type: "POST",
+                url: "/api/signup",
+                data: {
+                    id_give: id,
+                    pw_give : pw
+
+
+                },
+                success: function (response) {
+                    alert(response['msg'])
+                    window.location.href = '/login'
+
+
+                }
+            });
+        }
+
+
+
+
+
+
+
+</script>
+
+<body>
+
+    <div class="wrap">
+    <div class="img">
+        <h1>회원가입 페이지</h1>
+        <p class="imgtxt">빈칸을 기입해주세요</p>
+    </div>
+
+    <DIV>
+        <p class="ID">ID: <input type="text" id="idtxt" name="idtxt"></p>
+
+        <p class="PW">PW: <input type="text" id="pwtxt" name="pwtxt"></p>
+
+
+        <button class="btn" onclick="signup_do()" type="button">회원가입</button>
+    </DIV>
+    </div>
+
+
+</body>
+</html>
