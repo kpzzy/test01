@@ -72,7 +72,7 @@ def home():
 # 이거 붙여넣엇음
 @app.route("/movies", methods=["GET"])
 def movies_get():
-    movie_list = list(db.movies.find({},{'_id':False}))
+    movie_list = list(db.movies.find({},{'_id':False}).limit(20))
     return jsonify({'orders': movie_list})
 
 
