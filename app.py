@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify,redirect, url_for
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 import requests
 import datetime
 
@@ -34,7 +34,7 @@ SECRET_KEY = 'FREE'
 # 영화 크롤링
 for movie in movies:
     a = movie.select_one('div.thumb_cont > strong > a')
-    movie_list = list(db.movies.find({}, {'_id': False}))
+
 
     if a is None:
         title = a.text
@@ -66,14 +66,18 @@ for movie in movies:
 @app.route('/')
 def home():
     token_receive = request.cookies.get('token')
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        user_info = db.login.find_one({'id':payload['id']})
-        return render_template('index.html' , id=user_info['id'])
-    except jwt.ExpiredSignatureError:
-        return redirect(url_for('login', msg='타임오버'))
-    except jwt.exceptions.DecodeError:
-        return redirect(url_for('login', msg='틀림'))
+
+    if token_receive is not None:
+        try:
+            payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+            user_info = db.login.find_one({'id':payload['id']})
+            return render_template('index.html' , id=user_info['id'])
+        except jwt.ExpiredSignatureError:
+            return redirect(url_for('login', msg='타임오버'))
+        except jwt.exceptions.DecodeError:
+            return redirect(url_for('login', msg='틀림'))
+
+
 
 # 이거 붙여넣엇음
 @app.route("/movies", methods=["GET"])
@@ -93,8 +97,39 @@ def singup():
 def login():
     return render_template('login.html')
 
+# 디테일페이지
+@app.route('/detailpage')
+def detail():
+    token_receive = request.cookies.get('token')
+
+    if token_receive is not None:
+        try:
+            payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+            user_info = db.login.find_one({'id': payload['id']})
+            return render_template('landing.html', id=user_info['id'])
+        except jwt.ExpiredSignatureError:
+            return redirect(url_for('login', msg='타임오버'))
+        except jwt.exceptions.DecodeError:
+            return redirect(url_for('login', msg='틀림'))
 
 
+
+# 코멘트 저장
+@app.route("/Detail", methods=["POST"])
+def comment_post():
+    comment_receive = request.form['comment_give']
+
+
+    doc = {'comment':comment_receive}
+    db.comment.insert_one(doc)
+    
+    return jsonify({'msg':'저장완료'})
+
+# 코멘트 불러오기
+@app.route("/Detail", methods=["GET"])
+def comment_get():
+    comment_list = list(db.comment.find({}, {'_id': False}))
+    return jsonify({'comment': comment_list})
 
 
 # 여기는 아이디와 pw저장 api
