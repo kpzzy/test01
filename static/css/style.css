@@ -1,0 +1,154 @@
+ * {
+     font-family: 'Noto Sans KR', sans-serif;
+     padding: 0;
+     margin: 0;
+     box-sizing: border-box;
+ }
+
+ header {
+     padding: 20px 40px;
+     height: 80px;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     border-bottom: 1px solid #eee;
+ }
+
+ header .title {
+     font-size: 30px;
+ }
+
+ header > .member {
+     display: flex;
+ }
+ header > .member div {
+     width: 80px;
+     height: 40px;
+ }
+
+
+ header > .member button {
+     width: 100%;
+     height: 100%;
+     border: none;
+     border-radius: 20px;
+     cursor: pointer;
+ }
+
+ header > .member > .login {
+     margin-right: 20px;
+ }
+
+ main {
+     background-color: #f8f8f8;
+     padding: 0 40px;
+ }
+
+ main .main-header {
+     height: 100px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     font-size: 25px;
+ }
+
+ main .main-content {
+     display: flex;
+     max-width: 1000px;
+     margin: 0 auto;
+     flex-wrap: wrap;
+     justify-content: center;
+ }
+
+ main .main-content .card {
+     width: 250px;
+     padding: 15px;
+     cursor: pointer;
+     display: inline-block;
+ }
+
+ main .main-content .card .card-poster {
+     height:300px;
+     width: 100%;
+     position: relative;
+ }
+
+ main .main-content .card .card-rank {
+     position: absolute;
+     top: 0;
+     left: 0;
+     margin-top: 5px;
+     margin-left: 15px;
+     font-size: 30px;
+     color: white;
+     font-style: italic;
+ }
+
+ main .main-content .card .card-img {
+     width: 100%;
+     height: 100%;
+ }
+
+ main .main-content .card .card-img img {
+     width: 100%;
+     height: 100%;
+     object-fit: fill;
+     border-radius: 10px;
+ }
+
+ main .main-content .card .card-text {
+     margin-top: 17px;
+     margin-bottom: 25px;
+ }
+
+ main .main-content .card .card-title {
+     font-weight: 500;
+     font-size: 19px;
+     margin-bottom: 10px;
+ }
+
+ main .main-content .card .card-number {
+    display: flex;
+     font-size: 15px;
+     font-weight: 400;
+     color: #3a3a3a;
+ }
+
+ main .main-content .card .card-score {
+     margin-right: 20px;
+ }
+
+ main .main-content .card .card-score-number {
+     color: #e92130;
+ }
+
+ main .main-content .card .card-date {
+     color: #98989c;
+ }
+
+ .login-box{
+     display: flex;
+     align-items: center;
+     justify-content: center;
+ }
+
+ .id-control{
+     margin-right: 10px;
+ }
+ .login-btn{
+     text-align: center;
+     margin-top: 50px;
+ }
+ .wrap-login{
+     margin: 50px auto 50px auto;
+     width: 500px;
+     height: 100px;
+
+ }
+
+ .btn-box{
+     text-align: center;
+     margin: 10px auto 0px auto;
+ }
+
+

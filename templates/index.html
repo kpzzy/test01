@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
+          rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <link rel="stylesheet" href="../static/css/style.css">
+
+    <script>
+        $(document).ready(function () {
+            movies_get()
+        });
+
+        function sack(){
+
+            $.removeCookie('id', { path: '/' });
+            window.location.href = '/login';
+        }
+
+
+
+        function movies_get() {
+            $.ajax({
+                type: 'GET',
+                url: '/movies',
+                data: {},
+                success: function (response) {
+                    let rows = response['orders']
+                    for (let i = 0; i < rows.length; i++) {
+                        let rank = rows[i]['rank']
+                        let title = rows[i]['title']
+                        let rate = rows[i]['rate']
+                        let date = rows[i]['date']
+                        let img = rows[i]['img']
+                        let grade = rows[i]['grade']
+
+                        let temp_html = `<div class="card">
+                                            <div class="card-poster">
+                                                <div class="card-img">
+                                                    <img src="${img}"
+                                                         alt="">
+                                                </div>
+                                                <div class="card-rank">${rank}</div>
+                                            </div>
+                                            <div class="card-text">
+                                                <div class="card-title">
+                                                    ${title}
+                                                </div>
+                                                <div class="card-number">
+                                                    <div class="card-score">
+                                                        평점 <span class="card-score-number">${grade}</span>
+                                                    </div>
+                                                    <div class="card-rate">
+                                                        예매율 <span class="card-rate-number">${rate}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="card-date">
+                                                    개봉 <span class="card-date-number">${date}</span>
+                                                </div>
+                                            </div>
+                                        </div>`
+                        $('.main-content').append(temp_html)
+                    }
+
+                }
+            });
+        }
+    </script>
+
+    <title>MOVIEPIDIA</title>
+</head>
+<body>
+<div class="wrap">
+    <header>
+        <div class="title">MOVIEPIDIA</div>
+        <div class="member">
+            <div class="login">
+                <div class="idtxt" id="idtxt">{{id}}님 빵가루</div>
+            </div>
+            <div class = 'logout'><button onclick="sack()">로갓</button></div>
+            <div class="register">
+                <button onclick="window.location='/signup'">회원가입</button>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="main-header">
+            영화 순위
+        </div>
+        <div id="main-content" class="main-content">
+        </div>
+    </main>
+</div>
+</body>
+</html>
