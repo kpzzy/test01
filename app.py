@@ -34,7 +34,9 @@ SECRET_KEY = 'FREE'
 # 영화 크롤링
 for movie in movies:
     a = movie.select_one('div.thumb_cont > strong > a')
-    if a is not None:
+    movie_list = list(db.movies.find({}, {'_id': False}))
+
+    if a is None:
         title = a.text
         rank = movie.select_one('div > div.thumb_item > div.poster_movie > span.rank_num').text
         grade = movie.select_one('div.thumb_cont > span.txt_append > span:nth-child(1) > span').text
@@ -52,7 +54,11 @@ for movie in movies:
         }
 
 
+
         db.movies.insert_one(doc)
+
+
+
 
 
 
