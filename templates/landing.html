@@ -1,0 +1,213 @@
+
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../static/css/style.css">
+
+
+    <style>
+        .poster {
+            background-color: green;
+            width: 95%;
+            height: 500px;
+            margin: auto;
+        }
+
+        .lead {
+            width: 95%;
+            margin: auto;
+
+            border-color: grey;
+            border-style: solid;
+            border-radius: 3px;
+
+            margin-top: 10px;
+
+            align-items: center;
+        }
+
+        .comment {
+            width: 95%;
+            margin: auto;
+            padding: 10px;
+        }
+
+        .card {
+            width: 95%;
+            margin: auto;
+        }
+
+    </style>
+    <script>
+        import movies_get from './app.py'
+
+        $(document).ready(function (){
+            get_details()
+        });
+
+        $(document).ready(function () {
+            get_comment()
+        });
+
+
+        function save_comment() {
+            let comment = $('#comment').val()
+
+
+            $.ajax({
+                type: 'POST',
+                url: '/Detail',
+                data: {comment_give: comment},
+                success: function (response) {
+                    alert(response['msg'])
+                    window.location.href = '/detailpage'
+                }
+            })
+        }
+        function get_details(){
+            $.ajax({
+                type:'GET',
+                url:'/detail_info',
+                data:{},
+                success: function (response){
+                    console.log(response)
+                    let rows = response['details']
+                    for (let i =0; i< rows.length; i++){
+                        let detail_title = rows[i]['detail_title']
+                        let audience = rows[i]['audience']
+                        let de_date = rows[i]['de_date']
+                        let de_star = rows[i]['de_star']
+                        let genre = rows[i]['genre']
+                        let og_title = rows[i]['og_title']
+                        let time = rows[i]['time']
+
+                        let temp_html = `        <h1>${detail_title}</h1>
+        <h6> ${og_title}</h6>
+        <dl class="row">
+            <dt class="col-sm-3">개봉</dt>
+            <dd class="col-sm-9">${de_date}</dd>
+
+            <dt class="col-sm-3">장르</dt>
+            <dd class="col-sm-9">${genre}</dd>
+
+            <dt class="col-sm-3">평점</dt>
+            <dd class="col-sm-9">${de_star}</dd>
+
+            <dt class="col-sm-3">누적관객수</dt>
+            <dd class="col-sm-9">${audience}</dd>
+
+            <dt class="col-sm-3">러닝타임</dt>
+            <dd class="col-sm-9">${time}</dd>
+
+        </dl>`
+                        $(`#details`).append(temp_html)
+                    }
+
+
+                }
+
+            })
+
+        }
+        function get_comment() {
+            $.ajax({
+                type: 'GET',
+                url: '/Detail',
+                data: {},
+                success: function (response) {
+                    let rows = response['comment']
+                    for (let i = 0; i < rows.length; i++) {
+                        let comment = rows[i]['comment']
+
+                        let temp_html = `<blockquote class="blockquote mb-0">
+                                                <p id="cmtid">${comment}</p>
+                                                <footer class="blockquote-footer" id="idtxt">{{id}}님</footer>
+                                            </blockquote>`
+
+                        $('#cmtbody').append(temp_html)
+
+
+                    }
+                }
+            })
+        }
+
+    </script>
+    <title>토이프로젝트</title>
+</head>
+
+<body>
+<div class="wrap">
+    <header>
+        <div class="title">MOVIEPIDIA</div>
+        <div class="member">
+            <div class="login">
+                <div class="idtxt" id="idtxt">{{id}}님 빵가루</div>
+            </div>
+            <div class='logout'>
+                <button onclick="sack()">로갓</button>
+            </div>
+            <div class="register">
+                <button onclick="window.location='/signup'">회원가입</button>
+            </div>
+        </div>
+    </header>
+
+
+    <div class="poster">
+        <img src="..." class="img-fluid" alt="...">
+    </div>
+
+    <div class="lead" id="details">
+        <h1>영화 제목이 들어갑니다</h1>
+        <h6> 원화제목</h6>
+        <dl class="row">
+            <dt class="col-sm-3">개봉</dt>
+            <dd class="col-sm-9">2022.00.00</dd>
+
+            <dt class="col-sm-3">장르</dt>
+            <dd class="col-sm-9">액션/어드벤처</dd>
+
+            <dt class="col-sm-3">평점</dt>
+            <dd class="col-sm-9">평점</dd>
+
+            <dt class="col-sm-3">누적관객수</dt>
+            <dd class="col-sm-9">누적관객수</dd>
+
+            <dt class="col-sm-3">러닝타임</dt>
+            <dd class="col-sm-9">2022.00.00</dd>
+
+        </dl>
+    </div>
+
+    <div class="comment">
+        <div class="form-floating">
+            <textarea class="form-control" placeholder="Leave a comment here" id="comment"
+                      style="height: 100px"></textarea>
+        </div>
+        <button onclick="save_comment()" type="button" class="comment-btn">등록하기</button>
+    </div>
+
+    <div class="card">
+        <div class="card-body" id="cmtbody">
+            <blockquote class="blockquote mb-0">
+                <p id="cmtid">감상평이 들어갑니다.</p>
+                <footer class="blockquote-footer">{{id}}님</footer>
+            </blockquote>
+        </div>
+    </div>
+</body>
+
+</html>
