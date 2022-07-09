@@ -36,7 +36,7 @@ for movie in movies:
     a = movie.select_one('div.thumb_cont > strong > a')
 
 
-    if a is None:
+    if a is not None:
         title = a.text
         rank = movie.select_one('div > div.thumb_item > div.poster_movie > span.rank_num').text
         grade = movie.select_one('div.thumb_cont > span.txt_append > span:nth-child(1) > span').text
@@ -67,15 +67,15 @@ for movie in movies:
 def home():
     token_receive = request.cookies.get('token')
 
-    if token_receive is not None:
-        try:
+
+    try:
             payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
             user_info = db.login.find_one({'id':payload['id']})
             return render_template('index.html' , id=user_info['id'])
-        except jwt.ExpiredSignatureError:
-            return redirect(url_for('login', msg='타임오버'))
-        except jwt.exceptions.DecodeError:
-            return redirect(url_for('login', msg='틀림'))
+    except jwt.ExpiredSignatureError:
+            return redirect(url_for('copy', msg='타임오버'))
+    except jwt.exceptions.DecodeError:
+            return redirect(url_for('copy', msg='틀림'))
 
 
 
@@ -90,6 +90,10 @@ def movies_get():
 @app.route('/signup')
 def singup():
     return render_template('signup.html')
+# 0709 카피페이지
+@app.route('/copy')
+def copy():
+    return render_template('copy.html')
 
 
 # 로그인화면
@@ -146,7 +150,7 @@ def api_signup():
 
     return jsonify({'msg': '저장완료'})
 
-# 저장된 정보로 로그인하기 이거 왜안돼 씨발
+# 저장된 정보로 로그인하기
 @app.route('/api/login', methods=['POST'])
 def api_login():
     id_receive = request.form['id_give']
@@ -161,7 +165,9 @@ def api_login():
             'id' : id_receive,
             'exp' : datetime.datetime.utcnow() + datetime.timedelta(seconds=300)
         }
-        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+        # 타임도 조정해주기 ㅇㅇ
+        # ec2로 올릴때 이거 붙이기 .decode('utf-8')
+        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
 
         return jsonify({'msg' : '저장완료', 'token':token})
     else:
